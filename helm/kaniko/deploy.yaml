@@ -5,13 +5,16 @@ metadata:
 spec:
   containers:
   - name: kaniko
-    image: gcr.io/kaniko-project/executor:latest
-    args: ["--dockerfile=/workspace/dockerfile",
-            "--context=dir://workspace",
-            "--no-push"] 
-    volumeMounts:
-      - name: dockerfile-storage
-        mountPath: /workspace
+    image: gcr.io/kaniko-project/executor:debug
+    # args: ["--verbosity=trace",
+    #         "--dockerfile=Dockerfile",
+    #         "--context=git@github.com:gimral/kaniko-deploy.git",
+    #         "--context-sub-path=sample-beam-app",
+    #         "--no-push"] 
+    command:
+      - executor --context git@github.com:gimral/kaniko-deploy.git --context-sub-path=sample-beam-app --dockerfile Dockerfile --no-push
+  
+
     resources:
       limits:
         memory: 512Mi
@@ -20,7 +23,3 @@ spec:
         memory: 256Mi
         cpu: "0.2"
   restartPolicy: Never
-  volumes:
-    - name: dockerfile-storage
-      persistentVolumeClaim:
-        claimName: dockerfile-claim
