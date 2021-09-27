@@ -9,17 +9,20 @@ spec:
     args: ["--dockerfile=Dockerfile",
             "--context=git://github.com/gimral/kaniko-deploy.git",
             "--context-sub-path=sample-beam-app",
-            "--no-push",
+            "--destination=gimral/kaniko-test",
             "--cache",
-            "--cache-dir=/cache"]
+            "--cache-dir=/cache",
+            "--cache-repo=gimral/kaniko-test-cache"]
     volumeMounts:
       - name: maven-storage
-        mountPath: /roor/.m2
+        mountPath: /root/.m2
       - name: kaniko-cache
         mountPath: /cache
+      - name: docker-config
+        mountPath: /kaniko/.docker
     resources:
       limits:
-        memory: 512Mi
+        memory: 1024Mi
         cpu: "1"
       requests:
         memory: 256Mi
@@ -32,3 +35,11 @@ spec:
     - name: maven-storage
       persistentVolumeClaim:
         claimName: maven-claim
+    - name: docker-config
+      projected:
+        sources:
+        - secret:
+            name: regcred
+            items:
+              - key: .dockerconfigjson
+                path: config.json

@@ -9,6 +9,6 @@ spec:
   capacity:
     storage: 10Gi
   accessModes:
-    - ReadOnlyMany
+    - ReadWriteOnce
   hostPath:
     path: "/tmp/kaniko-cache"
