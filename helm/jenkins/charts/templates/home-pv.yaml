@@ -1,0 +1,22 @@
+{{- if and .Values.persistence.enabled (not .Values.persistence.existingClaim) -}}
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+    name: {{ template "jenkins.fullname" . }}
+    namespace: {{ template "jenkins.namespace" . }}
+spec:
+{{- if .Values.persistence.storageClass }}
+{{- if (eq "-" .Values.persistence.storageClass) }}
+    storageClassName: ""
+{{- else }}
+    storageClassName: "{{ .Values.persistence.storageClass }}"
+{{- end }}
+{{- end }}
+    accessModes:
+        - {{ .Values.persistence.accessMode | quote }}
+    capacity:
+        storage: {{ .Values.persistence.size | quote }}
+    persistentVolumeReclaimPolicy: Retain
+    hostPath:
+        path: /data/jenkins-volume/
+{{- end }}

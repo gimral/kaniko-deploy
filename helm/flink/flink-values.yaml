@@ -1,0 +1,22 @@
+image:
+  repository: gimral/flink-sample
+  tag: '1.0'
+
+flink:
+  monitoring:
+    enabled: false
+
+jobmanager:
+  additionalCommand:
+  command: >-
+    cp $FLINK_HOME/conf/flink-conf.yaml.tpl $FLINK_HOME/conf/flink-conf.yaml &&
+    $FLINK_HOME/bin/standalone-job.sh start-foreground --job-classname org.example.sideinput.SideInputTest --runner=FlinkRunner;
+
+taskmanager:
+  replicaCount: 1
+  additionalCommand:
+
+ingress:
+  enabled: true
+  className: nginx
+  host: flink.test

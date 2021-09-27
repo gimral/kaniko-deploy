@@ -1,0 +1,19 @@
+ingress:
+  enabled: true
+  className: nginx
+  hostPath: /
+  hostRepo: repo.test
+  hostDocker: registry.test
+
+nexus:
+  env:
+    - name: NEXUS_SECURITY_RANDOMPASSWORD
+      value: "false"
+  docker:
+    enabled: true
+    registries:
+      - host: registry.test
+        port: 5002
+
+persistence:
+  enabled: false

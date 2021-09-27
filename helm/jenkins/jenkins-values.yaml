@@ -1,0 +1,13 @@
+persistence:
+  storageClass: jenkins-pv
+
+controller:
+  image: "gimral/custom-jenkins"
+  tag: "1.0"
+  imagePullPolicy: "IfNotPresent"
+  installPlugins: false
+
+  ingress:
+    enabled: true
+    hostName: jenkins.test
+    ingressClassName: nginx
