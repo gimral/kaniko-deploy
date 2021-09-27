@@ -1,7 +1,7 @@
 kind: PersistentVolumeClaim
 apiVersion: v1
 metadata:
-  name: dockerfile-claim
+  name: maven-claim
 spec:
   accessModes:
     - ReadWriteOnce
