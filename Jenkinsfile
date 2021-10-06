@@ -16,7 +16,7 @@ pipeline {
         stage('preparation') {
             steps {                
                 checkout scm
-                sh "kubectl cluster-info" 
+                //sh "kubectl cluster-info" 
 
                 // script {
                 //     if (! fileExists("${PARAMETERS_FILE}")) {
