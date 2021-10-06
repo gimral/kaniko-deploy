@@ -42,14 +42,14 @@ pipeline {
             }
         }     
 
-        // stage('docker build') {  
-        //     steps {              
-        //         script {
-        //             sh("kubectl apply -f deploy/deploy.yaml")  
-        //             sh("/usr/local/bin/wait-on-kaniko-job.sh")      
-        //         } 
-        //     }                                             
-        // }
+        stage('docker build') {  
+            steps {              
+                script {
+                    sh("kubectl apply -f deploy/deploy.yaml")  
+                    sh("/usr/local/bin/wait-on-kaniko-job.sh")      
+                } 
+            }                                             
+        }
 
         stage('tag') {
             steps{
