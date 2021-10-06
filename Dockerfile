@@ -8,10 +8,6 @@ COPY pom.xml .
 # Resolve dependencies only by using pom.xml to ensure dependencies are not downloaded again if pom.xml remains same even if the code changes
 RUN mvn -B dependency:resolve-plugins dependency:go-offline
 
-# RUN mvn -o compile
-
-# RUN mvn -B -f /tmp/pom.xml -s /usr/share/maven/ref/settings-docker.xml dependency:resolve
-
 FROM base as builder
 
 COPY src ./src
