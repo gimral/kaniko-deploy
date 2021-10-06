@@ -4,6 +4,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: 'flink-jobmanager'
+  namespace: default
   labels:
 {{ include "flink.labels" . | indent 4 }}
 {{ toYaml .Values.prometheus.serviceMonitor.selector | indent 4 }}
@@ -29,6 +30,7 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: 'flink-taskmanager'
+  namespace: default
   labels:
 {{ include "flink.labels" . | indent 4 }}
 {{ toYaml .Values.prometheus.serviceMonitor.selector | indent 4 }}

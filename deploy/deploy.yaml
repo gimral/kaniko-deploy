@@ -3,6 +3,8 @@ kind: Job
 metadata:
   name: kaniko
 spec:
+  ttlSecondsAfterFinished: 100
+  backoffLimit: 4
   template:
     spec:
       containers:

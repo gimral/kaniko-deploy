@@ -1,6 +1,22 @@
 {{ if .Values.rbac.create }}
 {{- $serviceName := include "jenkins.fullname" . -}}
 
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: {{ $serviceName }}-cluster-role-binding
+  namespace: {{ template "jenkins.namespace" . }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: cluster-admin
+subjects:
+- kind: ServiceAccount
+  name: {{ template "jenkins.serviceAccountName" .}}
+  namespace: {{ template "jenkins.namespace" . }}
+
+---
+
 # This role is used to allow Jenkins scheduling of agents via Kubernetes plugin.
 apiVersion: rbac.authorization.k8s.io/v1
 kind: Role
