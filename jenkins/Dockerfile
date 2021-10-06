@@ -35,4 +35,7 @@ RUN /usr/local/bin/install-plugins.sh < /usr/share/jenkins/ref/plugins.txt
 RUN mkdir -p /root/.kube
 RUN mkdir -p /root/.aws
 
+COPY wait-on-kaniko-job.sh /usr/local/bin/wait-on-kaniko-job.sh
+RUN chmod +x /usr/local/bin/wait-on-kaniko-job.sh
+
 ENTRYPOINT ["/usr/local/bin/jenkins.sh"]

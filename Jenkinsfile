@@ -16,6 +16,9 @@ pipeline {
         stage('preparation') {
             steps {                
                 checkout scm
+                script {
+                    IMAGE_TAG = sh(returnStdout: true, script: "git log -n 1 --pretty=format:'%h'").trim()
+                }
                 //sh "kubectl cluster-info" 
 
                 // script {
@@ -42,9 +45,17 @@ pipeline {
         stage('docker build') {  
             steps {              
                 script {
-                    sh("kubectl apply -f deploy/deploy.yaml")      
+                    sh("kubectl apply -f deploy/deploy.yaml")  
+                    sh("/usr/local/bin/wait-on-kaniko-job.sh")      
                 } 
             }                                             
+        }
+
+        stage('tag') {
+            steps{
+                sh("git tag -a ${IMAGE_TAG} -m 'Jenkins'")
+                sh("git push origin --tags")
+            }
         }
 
                               
