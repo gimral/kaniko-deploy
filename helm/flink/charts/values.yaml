@@ -6,8 +6,8 @@ nameOverride: ""
 fullnameOverride: ""
 
 image:
-  repository: flink
-  tag: 1.11.2-scala_2.12
+  repository: gimral/kaniko-test
+  tag: latest
   pullPolicy: IfNotPresent
 imagePullSecrets: []
 
@@ -174,18 +174,10 @@ jobmanager:
   #    limits:
   #      cpu: 3800m
   #      memory: 8000Mi
-  additionalCommand: >-
-    cp /opt/flink/opt/flink-s3-fs-presto-*.jar
-    /opt/flink/lib/ &&
-    wget https://repo1.maven.org/maven2/com/github/oshi/oshi-core/3.4.0/oshi-core-3.4.0.jar
-    -O /opt/flink/lib/oshi-core-3.4.0.jar &&
-    wget https://repo1.maven.org/maven2/net/java/dev/jna/jna/5.4.0/jna-5.4.0.jar
-    -O /opt/flink/lib/jna-5.4.0.jar &&
-    wget https://repo1.maven.org/maven2/net/java/dev/jna/jna-platform/5.4.0/jna-platform-5.4.0.jar
-    -O /opt/flink/lib/jna-platform-5.4.0.jar
+  additionalCommand:
   command: >-
     cp $FLINK_HOME/conf/flink-conf.yaml.tpl $FLINK_HOME/conf/flink-conf.yaml &&
-    $FLINK_HOME/bin/jobmanager.sh start-foreground;
+    $FLINK_HOME/bin/standalone-job.sh start-foreground --job-classname org.example.sideinput.SideInputTest --runner=FlinkRunner;
   service:
     type: ClusterIP
     annotations: {}
@@ -236,7 +228,7 @@ taskmanager:
   extraEnvs: []
   ports:
     rpc: 6122
-  replicaCount: 4
+  replicaCount: 1
   numberOfTaskSlots: 1
   memoryProcessSize: 1g
   memoryFlinkSize:
@@ -245,15 +237,7 @@ taskmanager:
   #    limits:
   #      cpu: 3800m
   #      memory: 8000Mi
-  additionalCommand: >-
-    cp /opt/flink/opt/flink-s3-fs-presto-*.jar
-    /opt/flink/lib/ &&
-    wget https://repo1.maven.org/maven2/com/github/oshi/oshi-core/3.4.0/oshi-core-3.4.0.jar
-    -O /opt/flink/lib/oshi-core-3.4.0.jar &&
-    wget https://repo1.maven.org/maven2/net/java/dev/jna/jna/5.4.0/jna-5.4.0.jar
-    -O /opt/flink/lib/jna-5.4.0.jar &&
-    wget https://repo1.maven.org/maven2/net/java/dev/jna/jna-platform/5.4.0/jna-platform-5.4.0.jar
-    -O /opt/flink/lib/jna-platform-5.4.0.jar
+  additionalCommand:
   command: >-
     $FLINK_HOME/bin/taskmanager.sh start-foreground;
   service:
@@ -284,10 +268,11 @@ taskmanager:
   podAnnotations: {}
 
 ingress:
-  enabled: false
+  enabled: true
+  className: nginx
   annotations: {}
   path: /
-  host: 
+  host: flink.test
   tls: []
 
 prometheus:
